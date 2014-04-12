@@ -1,0 +1,50 @@
+#!/usr/bin/env node-harmony
+'use sctrict'
+
+var cerber			= require('cerber')
+  , fs				= require('fs')
+  , url				= require('url')
+  , util			= require('util')
+  , crypto			= require('crypto')
+  , http			= require('http')
+  , errors			= require('errors')
+  , Phoenix			= require('phoenix')
+  , cql				= require('ncc')
+  , cc				= require('cconfig')
+  , coroutine		= require('coroutine')
+
+cerber.initService()
+
+http.globalAgent.maxSockets = 200
+
+errors.activateCatcher()
+
+coroutine(function*(params, sv) {
+
+	global.config = JSON.parse(yield fs.readFile(cerber.daemonPath + '/spacecraft.config.json', sv.resume))
+	var commonConfig = JSON.parse(yield fs.readFile(cerber.daemonPath + '/../config/config.json', sv.resume))
+
+	var branch = process.env.SC_BRANCH || 'trunk'
+	console.log('use config branch ' + branch)
+
+	global.config = yield cc.create(config, branch, commonConfig, sv.onlyok)
+
+	global.ncc = new cql.Client(config.cassandra)
+	process.on('SIGINT', function() { ncc.shutdown()	})
+
+	var httpserver =  Phoenix.create({port:config.http_server.port
+	//	,hideRequestMessage: false
+	})
+	httpserver.mix(require('./middleware/cookie.js'))
+	httpserver.mix(require('./services/auth.js'))
+	httpserver.mix(require('./requests/profile/mix.js'))
+	httpserver.mix(require('./requests/galaxys/mix.js'))
+	httpserver.mix(require('./requests/planets/mix.js'))
+
+}, null, function(event, data) {
+	if(GE_ERROR === event) {
+		console.showError(data)
+		process.exit(255)
+	}
+})
+

@@ -1,0 +1,21 @@
+{
+	"common": {
+
+		"http_server": {
+			"port": 8400
+		},
+
+		"cassandra": {
+			"getAConnectionTimeout":	1000,
+			"poolSize":					20
+		}
+	},
+
+	"ek": {
+		"sessionCookie": "scsess",
+		"cassandra": {
+			"hosts":					"@cassandra/inner/ip",
+			"keyspace":					"sc"
+		}
+	}
+}

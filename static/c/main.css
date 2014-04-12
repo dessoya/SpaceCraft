@@ -1,0 +1,131 @@
+.logon_bkg {
+	background: #000 url(/i/logon2.jpeg ) center -30px no-repeat ;
+}
+
+body {
+	margin:		0;
+	padding:	0;
+	font-size:	100%;
+	background:	#000;
+	color:		#ccc;
+	font-family:	Trebuchet ms;
+}
+
+.cb { clear: both }
+
+.menu {
+	width:		960px;
+	margin:		0 auto;
+	min-height:	50px;
+}
+
+.menu .flag {
+	border:		1px solid black;
+	width:		18px;
+	height:		13px;
+	float:		left;
+}
+
+.menu .flag .i {
+	width:		16px;
+	height:		11px;
+	background-image: url(/i/flags.gif);
+	border:		1px solid black;
+	cursor:		pointer;
+}
+
+.menu .flag.current {
+	border-color:	#aaa !important;
+}
+
+.menu .flag.ru .i {
+	margin-right:	4px;
+	background-position: 0px 0px;
+}
+
+.menu .flag.en .i {
+	background-position: 0px -11px;
+}
+
+#lang {
+	float:		right;
+	padding:	8px 5px 0 0;
+}
+
+#usermenu {
+	float:		right;
+	width:		300px;
+	height:		20px;
+	margin-right:	5px;
+	padding-top:	3px;
+}
+
+#usermenu .caption {
+	border:		1px solid #aaa;
+	border-radius:	3px;
+	padding:	3px;
+	background:	#544;
+	opacity:	0.5;
+	font-size:	12px;
+	box-shadow:	2px 2px 8px #888888;
+}
+
+#usermenu a {
+	color:		#fff;
+	float:		right;
+}
+
+.main {
+	width:		960px;
+	margin:		0 auto;
+	height:		800px;
+}
+
+.main .detail {
+	width:		180px;
+	float:		left;
+	height:		800px;
+}
+
+.main .view {
+	width:		780px;
+	float:		left;
+	height:		800px;
+}
+
+#auth_list {
+	font-size: 11px;
+	line-height: 20px;
+}
+
+#auth_list a { float:right; display: inline; margin-left:5px }
+#auth_list a:hover { color: #aa5544 }
+
+
+input[type="text"] {
+	border: 1px solid #885544;
+	margin: 2px;
+	padding: 2px;
+}
+
+.usermenu a {
+	font-size: 12px;
+	color: #ffeeee;
+	text-decoration: none;
+}
+.usermenu a:hover {
+	text-decoration: underline;
+	color: #ffaa88;
+}
+
+
+
+.galaxy_list a {
+	font-size: 12px;
+	color: #ffeeee;
+	text-decoration: none;
+}
+.galaxy_list a:hover {
+	text-decoration: underline;
+	color: #ffaa88;
+}

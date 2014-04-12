@@ -1,0 +1,6 @@
+{
+	"name":								"spacecraft",
+	"sub_process_communication_port":	6100,
+	"logs_dir":							"/var/log/spacecraft",
+	"daemon_user":						"spacecraft"
+}

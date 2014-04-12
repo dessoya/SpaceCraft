@@ -1,0 +1,235 @@
+#!/usr/bin/env node-harmony
+'use sctrict'
+
+var cerber			= require('cerber')
+  , fs				= require('fs')
+  , url				= require('url')
+  , util			= require('util')
+  , crypto			= require('crypto')
+  , http			= require('http')
+  , errors			= require('errors')
+  , Phoenix			= require('phoenix')
+  , cql				= require('ncc')
+  , cc				= require('cconfig')
+  , coroutine		= require('coroutine')
+
+cerber.initService()
+
+http.globalAgent.maxSockets = 200
+
+errors.activateCatcher()
+
+coroutine(function*(params, sv) {
+
+	global.config = JSON.parse(yield fs.readFile(cerber.daemonPath + '/spacecraft.config.json', sv.resume))
+	var commonConfig = JSON.parse(yield fs.readFile(cerber.daemonPath + '/../config/config.json', sv.resume))
+
+	var branch = process.env.SC_BRANCH || 'trunk'
+	console.log('use config branch ' + branch)
+
+	global.config = yield cc.create(config, branch, commonConfig, sv.onlyok)
+
+	global.cc = new cql.Client(config.cassandra)
+	process.on('SIGINT', function() { cc.shutdown()	})
+
+	var passport			= require('passport')
+	  , GoogleStrategy		= require('passport-google').Strategy
+	  , FacebookStrategy	= require('passport-facebook').Strategy
+
+passport.initialize()
+passport.session()
+
+passport.serializeUser(function(user, done) {
+	console.log('serializeUser')
+				console.log(util.inspect(user,{depth:null}))
+  done(null, user);
+});
+ 
+passport.deserializeUser(function(obj, done) {
+	console.log('deserializeUser')
+				console.log(util.inspect(obj,{depth:null}))
+  done(null, obj);
+});
+
+
+	// gmail
+	passport.use(new GoogleStrategy({
+    	returnURL:	'http://192.168.88.253:8500/api/auth/gmail/return',
+	    realm:		'http://192.168.88.253:8500/'
+  	},
+	function(identifier, profile, done) {
+/*
+    	User.findOrCreate({ openId: identifier }, function(err, user) {
+			done(err, user);
+    	})
+*/
+	console.log('gmail')
+				console.log(util.inspect(profile,{depth:null}))
+
+process.nextTick(function () {
+   return done(null, profile);
+ });
+  	}))
+
+
+passport.use(new FacebookStrategy({
+    clientID: '638233889579358',
+    clientSecret: 'f0753f5228ae1d92aca19dcfa8831a73',
+    callbackURL: "http://192.168.88.253:8500/api/auth/facebook/return",
+	profileFields: ['id', 'displayName'],
+  },
+  function(accessToken, refreshToken, profile, done) {
+/*
+    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
+      return done(err, user);
+    });
+*/
+	console.log('fb')
+				console.log(util.inspect(profile,{depth:null}))
+
+process.nextTick(function () {
+   return done(null, profile);
+ });
+
+  }
+));
+
+	var httpserver =  Phoenix.create({port:config.http_server.port
+	//	,hideRequestMessage: false
+	}, {
+		'?middleware': function(req,res,info) {
+
+		var cookie = {};
+		if(req.headers.cookie) {
+			var pairs = req.headers.cookie.split(/\s*\;\s*/);
+			var i = pairs.length; while(i--) {
+				var p = pairs[i].split(/\s*=\s*/);
+				cookie[p[0]] = p[1];
+			}
+		}
+
+		// 1. check and create session cookie
+		if(!cookie[config.sessionCookie] || !cookie[config.sessionCookie].match(/^[\da-f]{32}$/) ) {
+			var md5 = crypto.createHash('md5');
+			md5.update(''+Date.now());
+			md5 = md5.digest('hex');
+			res.setHeader('Set-Cookie', config.sessionCookie+'='+md5+'; expires=' + (new Date(Date.now()+60*1000*60*24*60)).toUTCString()+'; path=/')
+
+			// sessions.createSession(md5);
+		}
+		else {
+			//sessions.createSession(cookie[config.sessionCookie], true);
+		}
+
+		},
+
+		'/api/auth/facebook':			Phoenix.Request.inherit({
+			onRequest: function() {
+
+				var req = this.req, res = this.res
+
+				this.res.redirect = function(p) {
+					console.log('r '+p)
+					this.writeHead(302, {'Location': p })
+					this.end()
+				}.bind(this)
+
+				passport.initialize()(req, res, function(){
+					passport.session()(req, res, function(){
+						passport.authenticate('facebook')(req, res)
+					})
+				})
+			}
+		}),
+
+		'/api/auth/facebook/return':		Phoenix.Request.inherit({
+			onRequest: function() {
+
+				var req = this.req, res = this.res
+
+				this.res.redirect = function(p) {
+					console.log('r '+p)
+					this.writeHead(302, {'Location': p })
+					this.end()
+				}.bind(this)
+
+				passport.initialize()(req, res, function(){
+					passport.session()(req, res, function(){
+						passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' })(req, res, function() {
+							console.log('next')
+						})
+					})
+				})
+
+/*
+			    this.writeHead(301, {'Location':'/'});
+*/
+				
+				console.log(util.inspect(this.req.method,{depth:null}))
+				var q = url.parse(this.req.url, true);
+/*
+				console.log(util.inspect(q,{depth:null}))
+				console.log(util.inspect(req,{depth:null}))
+				console.log(util.inspect(res,{depth:null}))
+				this.end();
+*/
+/*
+
+*/
+			}
+		}),
+
+		'/api/auth/gmail':			Phoenix.Request.inherit({
+			onRequest: function() {
+				console.log(123)
+				console.log(passport.authenticate('google')(this.req, this.res));
+			}
+		}),
+		'/api/auth/gmail/return':		Phoenix.Request.inherit({
+			onRequest: function() {
+
+		var q = url.parse(this.req.url, true);
+		var mode = q.query['openid.mode'];
+		console.log('mode ' + mode);
+		var cookie = {};
+		if(this.req.headers.cookie) {
+			var pairs = this.req.headers.cookie.split(/\s*\;\s*/);
+			var i = pairs.length; while(i--) {
+				var p = pairs[i].split(/\s*=\s*/);
+				cookie[p[0]] = p[1];
+			}
+		}
+		if('id_res' == mode) {
+			// ok
+			var email = q.query['openid.ext1.value.email']
+			console.log(email+' '+cookie[config.sessionCookie])
+/*
+			sessions.get(cookie[config.sessionCookie], function(session) {
+				if(session) {
+					session.data.userName = email;
+					session.data.auth = true;
+					session.update();
+				}
+			});
+*/
+		}
+		else if ('cancel' == mode) {
+			// cancel google auth
+		}
+		else {
+			// unknown => error
+		}
+	    this.writeHead(301, {'Location':'/'});
+		this.end();
+
+			}
+		}),
+	})
+
+}, null, function(event, data) {
+	if(GE_ERROR === event) {
+		console.showError(data)
+		process.exit(255)
+	}
+})
+
