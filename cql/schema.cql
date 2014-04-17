@@ -86,12 +86,37 @@ create table planets (
 	orbit int,
 	owner_user_uuid uuid,
 
+	treat_ms bigint,
+
 	buildings_list list<uuid>,
+
+	population_sinc double,
+	population double,
+	population_usage double,
+
+	crystals_sinc double,
+	crystals double,
+
+	minerals_sinc double,
+	minerals double,
+
+	fuel_sinc double,
+	fuel double,
+
+	energy double,
+	energy_usage double,
+	bld_energy_usage double,
 
 	primary key (planet_uuid)
 );
 
-create index idx_user on planets (owner_user_uuid);
+
+drop table live_planets;
+create table live_planets (
+	planet_uuid uuid,
+	treat_ms bigint,
+	primary key (planet_uuid)
+);
 
 -- map
 

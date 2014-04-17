@@ -10,7 +10,7 @@ var APIRequest = Phoenix.Request.inherit({
 			this.readPost();
 		}
 		else {
-			this.process({})
+			this.process(this.info.query)
 		}
 	},
 
@@ -19,7 +19,6 @@ var APIRequest = Phoenix.Request.inherit({
 	},
 
 	process: function(data) {
-
 		if(!this.opt.hideRequestMessage) {
 			console.log(this.info.pathname + ' ' + JSON.stringify(data))
 		}

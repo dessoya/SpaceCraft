@@ -129,3 +129,104 @@ input[type="text"] {
 	text-decoration: underline;
 	color: #ffaa88;
 }
+
+
+#planet_info {
+	margin-top: 4px;
+	margin-left: 3px;
+	font-size: 11px;
+	color: #dddddd;
+}
+
+.resicon {
+	width:16px;
+	height:16px;
+	background-image: url("../i/icons.png");
+}
+
+#planet_info .resicon {
+	margin-right: 4px;
+	margin-left: 4px;
+	float:left;
+}
+
+#planet_info .label,
+#planet_info .div {
+	height:16px;
+	float:left;
+	margin-right: 4px;
+	padding: 0 3px;
+	line-height: 16px;
+	cursor: default;
+}
+
+#planet_info .label:hover {
+	background: #664433;
+}
+
+#planet_info .label.green {
+	color:green;
+	font-weight: bold;
+}
+
+#planet_info .label.red {
+	color:red;
+}
+
+.resicon.population { background-position: -256px 0 }
+.resicon.energy{  background-position: -48px 0 }
+.resicon.metal {  background-position: -80px 0 }
+.resicon.crystal {  background-position: 0 0 }
+
+
+#detail_submenu {
+	margin-top: 20px;
+}
+
+
+.building_info {
+	font-size:11px;
+}
+
+.building_info .bld_type {
+	font-size:13px;
+	font-weight:bold;
+	color: #ffaaaa;
+}
+
+.building_info button {
+	font-size:8px;
+	margin:0;
+	padding:0 2px;	
+}
+
+
+#pcmenu .mitem { 
+	float:left;
+	width: 35px;
+	border: 1px solid #fff;
+	font-size: 9px;
+	padding: 1px 3px;
+	cursor: pointer;
+}
+#pcmenu .mitem.active { 
+	background: #886644;
+}
+
+#pcsubmenu .build {
+	width: 80px;
+	border: 1px solid #fff;
+	font-size: 9px;
+	padding: 1px 3px;
+	cursor: pointer;
+	margin: 3px 0;
+}
+
+#pcsubmenu .build:hover {
+	background: #886644;
+}
+
+#pcsubmenu .build.active {
+	background: #886644;
+	border: 1px solid red;
+}

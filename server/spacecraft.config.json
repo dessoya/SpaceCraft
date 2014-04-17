@@ -12,6 +12,8 @@
 	},
 
 	"ek": {
+		"rate": 10,
+
 		"sessionCookie": "scsess",
 		"cassandra": {
 			"hosts":					"@cassandra/inner/ip",

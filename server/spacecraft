@@ -12,6 +12,9 @@ var cerber			= require('cerber')
   , cql				= require('ncc')
   , cc				= require('cconfig')
   , coroutine		= require('coroutine')
+  , ct				= require('ct')
+
+  , ResourceTreator	= require('./ResourceTreator.js')
 
 cerber.initService()
 
@@ -32,9 +35,109 @@ coroutine(function*(params, sv) {
 	global.ncc = new cql.Client(config.cassandra)
 	process.on('SIGINT', function() { ncc.shutdown()	})
 
+	var schemaConfig = {
+		keyspace: 'sc',
+		objects: {
+
+			planet: {
+				table: 'planets',
+				type_id: 1,
+			},
+
+			live_planet: {
+				table: 'live_planets',
+				type_id: 4,
+			},
+
+			user: {
+				table: 'users',
+				type_id: 2,
+			},
+
+			building: {
+				table: 'buildings',
+				type_id: 3,
+			},
+		}
+	}
+
+	global.schema = yield ct.loadSchema(ncc, schemaConfig, sv.resume)
+/*
+	delete schema.ncc
+	console.log(util.inspect(schema,{depth:null}))
+	process.exit(255)
+*/
+
+	global.objects = {
+		building:		require('./objects/building.js').create(),
+		planet:			require('./objects/planet.js').create(),
+	}
+
+	console.log(util.inspect(objects, {depth:null}))
+
+	global.buildingTreator = ResourceTreator.inherit({
+		gen_treat: function*(params, sv) {
+
+			var reader = params.reader, objectId = params.objectId, delta = params.delta
+			var result = yield ncc.execute('select * from live_planets where planet_uuid = ' + objectId, [], sv.resume)
+			var b = result.rows[0]
+			b.treat_ms = parseInt(b.treat_ms.toString())
+			var deltasecs = Math.floor(delta / 1000)
+
+			yield objects.planet.process(objectId, deltasecs, sv.resume3end)
+
+			// move treat time line
+			params.new_treat_ms = b.treat_ms + deltasecs * 1000
+		}
+	}).create('live_planet', 10, 100)
+
+/*
+	global.buildingTreator = ResourceTreator.inherit({
+		gen_treat: function*(params, sv) {
+
+			var reader = params.reader, objectId = params.objectId, delta = params.delta
+			var result = yield ncc.execute('select * from buildings where building_uuid = ' + objectId, [], sv.resume)
+			var b = result.rows[0]
+			b.treat_ms = parseInt(b.treat_ms.toString())
+			var deltasecs = Math.floor(delta / 1000)
+
+			// console.log('delta '+delta+' deltasecs '+deltasecs)
+
+			switch(b.type) {
+			case 1:
+			var inSec = objects.building.capital.levelParams[b.level].popInSec
+			// console.log('inSec '+inSec)
+
+			// update users params
+			var lock_state = false
+			while(!lock_state) {
+				lock_state = yield schema.lockPlanet(b.planet_uuid, 1000, sv.resume3end)
+			}
+
+			result = yield ncc.execute('select population from planets where planet_uuid = ' + b.planet_uuid, [], sv.resume)
+			var user = result.rows[0]
+			user.population = parseFloat(user.population)
+
+			// console.log('setup new population '+(user.population + inSec * deltasecs))
+			result = yield ncc.execute('update planets set population = '+(user.population + inSec * deltasecs)+' where planet_uuid = ' + b.planet_uuid, [], sv.resume)
+
+			yield schema.unlockPlanet(b.planet_uuid, sv.resume)
+			break
+
+			case 2:
+			break
+			}
+			
+			// move treat time line
+			params.new_treat_ms = b.treat_ms + deltasecs * 1000
+		}
+	}).create('building', 10, 100)
+*/
+
 	var httpserver =  Phoenix.create({port:config.http_server.port
 	//	,hideRequestMessage: false
 	})
+
 	httpserver.mix(require('./middleware/cookie.js'))
 	httpserver.mix(require('./services/auth.js'))
 	httpserver.mix(require('./requests/profile/mix.js'))

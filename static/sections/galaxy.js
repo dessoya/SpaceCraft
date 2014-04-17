@@ -6,13 +6,17 @@ var SectionGalaxy = Class.inherit({
 		this.binded_animate = this.animate.bind(this);
 	},
 
+	deactivate: function() {
+		cancelAnimationFrame(this.requestId);
+	},
+
 	activate: function(params) {
 		detailmenu.setItem('galaxys');
-		view.innerHTML = 'galaxy '+params[0]+'<br><div style="background:#000;opacity:0.8;width:100%;height:600px" id="galaxy_map"></div>';
+		view.innerHTML = 'galaxy <span id="galaxy_name">'+params[0]+'</span><br><div style="background:#000;opacity:0.8;width:100%;height:600px" id="galaxy_map"></div>';
 
 		AJAX.create({
 			type: 'json',
-			post: JSON.stringify({ name: params[0] }),
+			post: JSON.stringify({ galaxy_uuid: params[0] }),
 			url: selfDomain() + '/api/galaxys/load',
 			success: this.binded_onLoad,
 /*
@@ -25,24 +29,13 @@ var SectionGalaxy = Class.inherit({
 	},
 
 	onLoad: function(answer) {
-		this.init(answer.result);
+		galaxy_name.innerHTML = answer.result.name;
+		this.init(answer.result.star_systems, answer.result.user_star_systems);
 		this.animate();
 	},
 
-	init: function(stars_) {
-/*
-		var container, stats;
-		var camera, scene, renderer, group,topgroup, particle;
-		var mouseX = 0, mouseY = 0, mouse2D, raycaster, projector, ROLLOVERED;
-		var deltaX = 0, origX = 0, mouseDown = false, clickedY, origY = 200, deltaY = 0, cube, cube2;
-		var _2dcontext;
+	init: function(stars_, uss_) {
 
-		var clock = new THREE.Clock();
-		var acc = 0;
-
-		var windowHalfX = window.innerWidth / 2;
-		var windowHalfY = window.innerHeight / 2;
-*/
 		this.mouseX = 0;
 		this.mouseY = 0;
 
@@ -92,6 +85,13 @@ var SectionGalaxy = Class.inherit({
 
 		var cm = [ 0xdd462F, 0xdd666F, 0xdd868F, 0xddD68F, 0xadd6aF, 0xddD6FF, 0x8ED6FF ];
 
+		var geometry = new THREE.CubeGeometry( 7, 7, 7, 1, 1, 1 );
+		var meshmaterials = [
+			new THREE.MeshBasicMaterial( { color: 0x808080, wireframe: true, opacity: 0.8, transparent: true } )
+		];
+
+		// var cnt_ = 0;
+		this.uss = [];
 		for(var id_ in stars_) {
 			var star_ = stars_[id_];
 			// console.log(star_);
@@ -100,39 +100,21 @@ var SectionGalaxy = Class.inherit({
 
 			particle.position.x = star_.x;
 			particle.position.y = star_.y;
-			particle.position.z = star_.z;
+			particle.position.z = star_.z;			
 
 			particle.scale.x = particle.scale.y = star_.scn / 7;
-			particle._name = id_;
+			particle._name = id_.substr(-5);
 			this.group.add( particle );
+
+			if(id_ in uss_) {
+
+				var cube = THREE.SceneUtils.createMultiMaterialObject( geometry , meshmaterials );
+				cube.position.set( star_.x, star_.y, star_.z );
+				this.topgroup.add( cube );
+
+				this.uss.push(particle);
+			}
 		}
-
-		// var map = THREE.ImageUtils.loadTexture( 'earth_atmos_2048.jpg' );
-
-		var materials = [
-			// new THREE.MeshPhongMaterial( { color: 0xffffff, map: map } )
-		];
-
-		var geometry = new THREE.SphereGeometry( 45, 10, 10 );
-
-		// var meshPlanet = new THREE.Mesh( geometry, new THREE.MeshBasicMaterial( { map: map, overdraw: true } ) );
-
-		// meshPlanet.position.set( 100, 0, 0 );
-
-		var meshmaterials = [
-			new THREE.MeshBasicMaterial( { color: 0x808080, wireframe: true, opacity: 0.8, transparent: true } )
-		];
-
-		geometry = new THREE.CubeGeometry( 10, 10, 10, 1, 1, 1 );
-
-		var cube = THREE.SceneUtils.createMultiMaterialObject( geometry , meshmaterials );
-		cube.position.set( 1000000, 1000000, 1000000 );
-		this.topgroup.add( cube );
-
-		geometry = new THREE.CubeGeometry( 15, 15, 15, 1, 1, 1 );
-		var cube2 = THREE.SceneUtils.createMultiMaterialObject( geometry , meshmaterials );
-		cube2.position.set( 1000000, 1000000, 1000000 );
-		this.topgroup.add( cube2 );
 
 		this.renderer = new THREE.CanvasRenderer();
 		this.renderer.setSize( galaxy_map.clientWidth, galaxy_map.clientHeight );
@@ -141,18 +123,6 @@ var SectionGalaxy = Class.inherit({
 
 		this._2dcontext = this.renderer.domElement.getContext('2d');
 
-/*
-				stats = new Stats();
-				stats.domElement.style.position = 'absolute';
-				stats.domElement.style.top = '0px';
-				container.appendChild( stats.domElement );
-
-				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
-				document.addEventListener( 'mouseup', onDocumentMouseUp, false );
-*/
-
-		// window.addEventListener( 'resize', this.onWindowResize, false );
 
 		this.windowHalfX = galaxy_map.clientWidth / 2;
 		this.windowHalfY = galaxy_map.clientHeight / 2;
@@ -165,11 +135,8 @@ var SectionGalaxy = Class.inherit({
 	},
 
 	animate: function() {
-
-		requestAnimationFrame( this.binded_animate );
-
+		this.requestId = requestAnimationFrame( this.binded_animate );
 		this.render();
-		// stats.update();
 	},
 
 	render: function() {
@@ -182,13 +149,25 @@ var SectionGalaxy = Class.inherit({
 		this.camera.lookAt( this.scene.position );
 
 		this.topgroup.rotation.y = this.origX + this.deltaX * 0.001 + this.acc * 0.1;
-/*
-		this.raycaster = this.projector.pickingRay( this.mouse2D.clone(), this.camera );
-		this.raycaster.far = 200;
-		this.raycaster.near = 200;
-		this.raycaster.precision = 20;
-*/
-		this.renderer.render( this.scene, this.camera );
-	}
 
+		this.renderer.render( this.scene, this.camera );
+
+		this._2dcontext.font = 'normal 10px Verdana';
+		this._2dcontext.textBaseline = 'bottom';
+		this._2dcontext.fillStyle = '#aaa';
+
+		var c = this.uss.length; while(c--) {
+			var item = this.uss[c];
+
+			var p = new THREE.Vector3();
+			p.getPositionFromMatrix( item.matrixWorld );
+			var vector = this.projector.projectVector( p, this.camera );
+
+			var x = ( vector.x * this.windowHalfX ) + this.windowHalfX;
+			var y = - ( vector.y * this.windowHalfY ) + this.windowHalfY;
+
+			this._2dcontext.textAlign = vector.x > 0 ? 'right' : 'left';
+			this._2dcontext.fillText('system **'+item._name, x, y - 5);
+		}
+	}
 })

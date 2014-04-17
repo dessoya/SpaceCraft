@@ -30,6 +30,8 @@ var DetailMenu = Class.inherit({
 		html += this.makeDetailItem('#','главная', 'main');
 		html += this.makeDetailItem('#profile','профиль', 'profile');
 		html += this.makeDetailItem('#capital','столица', 'capital');
+		html += this.makeDetailItem('#ыныеуьы','системы', 'systems');
+		html += this.makeDetailItem('#planets','планеты', 'planets');
 		html += this.makeDetailItem('#galaxys','галактики', 'galaxys');
 		html += '</div>';
 

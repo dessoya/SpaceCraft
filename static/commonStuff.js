@@ -1,4 +1,8 @@
 
+Number.prototype.humanView = function () {
+	return this.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( " " );
+}
+
 document.title = "\u2606" + document.title;
 
 usermenu = UserMenu.create();
@@ -10,6 +14,7 @@ function initSession() {
 		url: selfDomain() + '/api/session/info',
 		success: function(answer, ctx) {
 			userinfo = answer.result;
+			// if(userinfo.username) userResource = UserResource.create(userinfo)
 			window.onhashchange()
 		}
 	})

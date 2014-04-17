@@ -56,15 +56,25 @@ var Sections = Class.inherit({
 	},
 
 	activate: function(sectionName) {		
+
 		if(this.sectionName === sectionName) return;
 		this.sectionName = sectionName;
-		var section = this.find(sectionName);
+
+		var section = this.find(sectionName), params = []
 		if(section) {
-			section.section.activate(section.params);
+			params = section.params
+			section = section.section
 		}
 		else {
-			this.sections[this.sectionName].activate();
+			section = this.sections[this.sectionName]
 		}
+
+		if(this.section && this.section.deactivate) this.section.deactivate()
+		window.section = this.section = section
+
+		detail_submenu.innerHTML = '';
+
+		section.activate(params)
 	}
 
 })

@@ -19,6 +19,7 @@
 <script type="text/javascript" src="config.js"></script>
 <script type="text/javascript" src="usermenu.js"></script>
 <script type="text/javascript" src="detailmenu.js"></script>
+<script type="text/javascript" src="userresource.js"></script>
 <script type="text/javascript" src="commonStuff.js"></script>
 
 <!-- sections classes -->
@@ -27,6 +28,10 @@
 <script type="text/javascript" src="sections/galaxys.js"></script>
 <script type="text/javascript" src="sections/galaxy.js"></script>
 <script type="text/javascript" src="sections/capital.js"></script>
+
+<script type="text/javascript" src="sections/planet/pc_view.js"></script>
+<script type="text/javascript" src="sections/planet/pc_build.js"></script>
+<script type="text/javascript" src="sections/planet/planetinfo.js"></script>
 <script type="text/javascript" src="sections/planet.js"></script>
 
 <script type="text/javascript" src="sections.js"></script>
@@ -62,11 +67,15 @@ function onLoad() {
 		<div class="flag en"><div class="i"></div></div-->
 		<div class="cb"></div>
 	</div>
+	<div id="header_userinfo"></div>
 	<div id="usermenu"><div id="auth_list"></div></div>
 	<div class="cb"></div>
 </div>
 <div class="main">
-	<div id="detail" class="detail"></div>
+	<div class="detail">
+		<div id="detail"></div>
+		<div id="detail_submenu"></div>
+	</div>
 	<div id="view" class="view"></div>
 	<div class="cb"></div>
 </div>
