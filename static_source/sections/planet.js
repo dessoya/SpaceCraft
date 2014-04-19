@@ -50,11 +50,9 @@ function turnOff() {
 var SectionPlanet = Class.inherit({
 
 	onCreate: function() {
-
-		this.binded_onLoadPlanet = this.onLoadPlanet.bind(this);
 		this.binded_animate = this.animate.bind(this);
 
-		this.planetinfo = SP_PlanetInfo.create();
+		this.planetinfo = SP_PlanetInfo.create(this);
 
 		this.pc = [ PCView.create(), PCBuild.create() ];
 		this.pc_item = -1;
@@ -62,9 +60,9 @@ var SectionPlanet = Class.inherit({
 	},
 
 	deactivate: function() {
-		clearInterval(this.interval);
 		cancelAnimationFrame(this.requestId);
 		if(this.active_pc) this.active_pc.deactivate();
+		this.planetinfo.deactivate();
 	},
 
 	activate: function(params) {
@@ -107,19 +105,16 @@ var SectionPlanet = Class.inherit({
 		this.selphase = 0;
 
 		this.animate();
-
-		this.planet = null;
-
-		this.interval = setInterval(this.onInterval.bind(this), 700);
-
-		this.loading = false;
-		this.loadPlanetInfo();
+		this.planetinfo.activate(planet_uuid);
 	},
 
 	// misc
+	loadPlanetInfo: function() {
+		this.planetinfo.loadPlanetInfo();
+	},
 
 	buildingNames: {
-		1: 'Capital',
+		1: 'Столица',
 		2: 'Warehouse',
 		3: 'EStation',
 		4: 'MMine',
@@ -148,137 +143,14 @@ var SectionPlanet = Class.inherit({
 		pcmenu.innerHTML = '<div>'+html.join('')+'<div style="clear:both"></div></div>';
 	},
 
-	// planet info stuff
-
-	loadPlanetInfo: function() {
-		if(this.loading) return;
-
-		this.loading = true;
-		AJAX.create({
-			type: 'json',
-			post: JSON.stringify({planet_uuid: this.planet_uuid}),
-			url: selfDomain() + '/api/planets/get',
-			success: this.binded_onLoadPlanet
-		})
-	},
-
-	onLoadPlanet: function(answer) {
-		this.loading = false;
-		this.loadTime = Date.now();
-
-		if(answer && answer.status && answer.status === 'ok') {
-
-			var planet = answer.result;
-			// console.log(planet);
-			if(planet) {
-
-				this.buildings = planet.buildings;
-
-				this.buildings.sort(function(a,b) {
-					if(a.y == b.y) {
-						if(a.x == b.x) return 0;
-						return a.x < b.x ? -1 : 1;
-					}
-					return a.y < b.y ? -1 : 1;
-				})
-
-				var c = this.buildings.length; this.bmap = {}; while(c--) {
-					var b = this.buildings[c];
-					this.bmap[b.building_uuid] = b;
-				}
-
-				this.planet = planet.planet;
-				this.time = Date.now();
-				this.makePlanetInfo();
-
-				if(this.active_pc) this.active_pc.onLoadPlanetInfo();
-			}
-			else {
-				view.innerHTML = 'error while loading planet info';
-				this.deactivate();
-			}
-		}
-		else {
-			view.innerHTML = 'problem with loading planet';
-			this.deactivate();
-		}
-	},
-
-	onInterval: function() {
-		if(!this.loading && Date.now() - this.loadTime > 1000 *5) {
-			this.loadPlanetInfo();
+	onLoadPlanetInfo: function(err) {
+		this.buildings = this.planetinfo.buildings;
+		var c = this.buildings.length; this.bmap = {}; while(c--) {
+			var b = this.buildings[c];
+			this.bmap[b.building_uuid] = b;
 		}
 
-		if(this.planet) {
-
-			var delta = Math.floor( (Date.now() - this.time) / 1000 );
-			if(delta > 0) {
-				this.planet.population += delta * this.planet.population_sinc;
-				this.planet.minerals += delta * this.planet.minerals_sinc;
-				this.planet.crystals += delta * this.planet.crystals_sinc;
-				this.time += delta * 1000;
-				this.makePlanetInfo();
-
-				var need_load = false, c = this.buildings.length; while(c--) {
-					var b = this.buildings[c];
-					if(b.upgrading === 1 && b.upgrade_in_progress === 1) {
-						b.upgrade_elapsed  += delta
-						if(b.upgrade_elapsed >= b.upgrade_time) {
-							b.upgrading = 0
-							need_load = true
-						}
-					}		
-				}
-
-				if(need_load) {
-					this.loadPlanetInfo()
-				}
-			}
-
-		}
-	},
-
-	makePlanetInfo: function() {
-		if(this.planet) {
-			var html = '';
-			html += '<div>';
-
-			html += '<div class="resicon population" title="население"></div>';
-			html += '<div class="label" title="всего">' + Math.floor(this.planet.population).humanView()+'M</div>';
-			if(this.planet.population_usage > 0) {
-				html += '<div class="div">/</div>';
-				html += '<div class="label green" title="безработные">' + Math.floor(this.planet.population_usage).humanView() + 'M</div>';
-			}
-			else {
-				html += '<div class="label" title="безработные">( '+(this.planet.population_usage < 0 ? 'нехватка '+(Math.floor(-1*this.planet.population_usage)) : 'безработные '+Math.floor(this.planet.population_usage) )+' )';
-			}
-
-			html += '<div class="resicon energy" title="энергия"></div>';
-			html += '<div class="label" title="общая выработка энергии">' + Math.floor(this.planet.energy).humanView()+'</div>';
-			html += '<div class="div">/</div>';
-			html += '<div class="label green" title="свободная энергия">' + Math.floor(this.planet.energy - this.planet.bld_energy_usage).humanView()+'</div>';
-			if(this.planet.energy_usage < 0) {
-				html += '<div class="div">/</div>';
-				html += '<div class="label red" title="нехватка энергии для населения">' + Math.floor(-1 * this.planet.energy_usage).humanView()+'</div>';
-			}
-
-			html += '<div class="resicon metal" title="металл"></div>';
-			html += '<div class="label" title="вместимость склада для металла">' + Math.floor(this.planet.wh_minerals).humanView() + '</div>';
-			html += '<div class="div">/</div>';
-			html += '<div class="label" title="металла на складе">' + Math.floor(this.planet.minerals).humanView()+'</div>';
-			html += '<div class="div">/</div>';
-			html += '<div class="label" title="добыча металла в час">5</div>';
-
-			html += '<div class="resicon crystal" title="кристаллы"></div>';
-			html += '<div class="label" title="вместимость склада для кристаллов">' + Math.floor(this.planet.wh_crystals).humanView() + '</div>';
-			html += '<div class="div">/</div>';
-			html += '<div class="label" title="кристаллов на складе">' + Math.floor(this.planet.crystals).humanView()+'</div>';
-			html += '<div class="div">/</div>';
-			html += '<div class="label" title="добыча скристаллов в час">5</div>';
-
-			html += '<div style="clear:both"></div></div>';
-			planet_info.innerHTML = html;
-		}
+		if(this.active_pc) this.active_pc.onLoadPlanetInfo();
 	},
 
 	onMouseDown: function ( event ) {
@@ -307,6 +179,7 @@ var SectionPlanet = Class.inherit({
 	},
 
 	animate: function() {
+		timerInfo('planet animate');
 		this.requestId = requestAnimationFrame( this.binded_animate );
 		this.selphase ++;
 		this.render();
@@ -454,9 +327,10 @@ var SectionPlanet = Class.inherit({
 		ctx.font = 'normal 10px Verdana';
 		ctx.textBaseline = 'bottom';
 		ctx.fillStyle = '#000';
-		ctx.fillText(this.buildingNames[type], this.xpos(x,y,270), this.ypos(x,y,270));
+		var xb = this.xpos(x,y,270) - 4, yb = this.ypos(x,y,270) - 4
+		ctx.fillText(this.buildingNames[type], xb, yb);
 		ctx.fillStyle = (bld.turn_on === 1) ? '#fff' : '#f00';
-		ctx.fillText(this.buildingNames[type], this.xpos(x,y,270)+1, this.ypos(x,y,270)+1);
+		ctx.fillText(this.buildingNames[type], xb + 1, yb + 1);
 
 		if(bld.upgrading === 1) {
 

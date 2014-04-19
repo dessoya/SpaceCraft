@@ -20,8 +20,8 @@ var DetailMenu = Class.inherit({
 
 	makeDetailItem: function(hash, title, section) {
 		return section === this.item ?
-			'<div><a href="'+hash+'">[ '+title+' ]</a></div>' :
-			'<div>&nbsp;&nbsp;<a href="'+hash+'">'+title+'</a></div>';
+			'<div class="line"><div class="leftb">[</div><a href="'+hash+'">'+title+'<span class="underline"></span></a><div class="rightb">]</div></div>' :
+			'<div class="line"><a href="'+hash+'">'+title+'<span class="underline"></span></a></div>';
 	},
 
 	AuthMenu: function() {

@@ -1,10 +1,13 @@
 
 var PCView = Class.inherit({
+
 	onCreate: function() {
 		this.name = 'view';
 	},
+
 	deactivate: function() {
 	},
+
 	activate: function() {
 		this.onSelectBuilding();
 	},
@@ -13,6 +16,31 @@ var PCView = Class.inherit({
 
 		var overed = null;
 
+		var map = {}
+		for(var i = 0, b = section.buildings, l = b.length; i < l; i++) {
+			var item = b[i];
+			var key = item.x + '-' + item.y;
+			map[key] = item;
+		}
+
+		for(var by = 11; by >= 0; by--) {
+			for(var bx = 11; bx >= 0; bx--) {
+
+				var x1 = section.xpos(10 + bx * 80, 10 + by * 80 + 80), x2 = section.xpos(10 + bx * 80 + 80, 10 + by * 80);
+				var y1 = section.ypos(10 + bx * 80, 10 + by * 80, 250), y2 = section.ypos(10 + bx * 80 + 80, 10 + by * 80 + 80);
+
+				if(x >= x1 && x <= x2 && y >= y1 && y <= y2) {
+					var key = bx + '-' + by;
+					if(key in map) {
+
+						overed = map[key].building_uuid;
+						break;
+					}
+				}
+			}			
+			if(overed) break;
+		}
+/*
 		var b = section.buildings, c = b.length; while(c--) {
 			var item = b[c];
 			var x1 = section.xpos(10 + item.x * 80, 10 + item.y * 80 + 80), x2 = section.xpos(10 + item.x * 80 + 80, 10 + item.y * 80);
@@ -23,6 +51,7 @@ var PCView = Class.inherit({
 				break;
 			}
 		}
+*/
 
 		if(overed !== section.overed) {
 			section.overed = overed;
@@ -53,12 +82,17 @@ var PCView = Class.inherit({
 
 			var item = section.bmap[section.selected];
 
-			var html = '��������:<br><span class="bld_type">'+section.buildingNames[item.type]+'</span> level '+item.level;
+			var html = '<br>';
+			html +='<div><div style="float:left"><span class="bld_type">'+section.buildingNames[item.type]+'</span> '+item.level+' lvl';
 
-			if(item.upgrading === 1) html += '&nbsp;-> '+(item.level + 1)+'<br>';
+			if(item.upgrading === 1) html += '&nbsp;<span class="hint" title="Постройка в процессе улучшения">-> '+(item.level + 1)+'</span></div><div title="Постройка в процессе улучшения" class="timer"></div>';
 			else {
-				html += '&nbsp;<button onclick="levelUp()">-> '+(item.level + 1)+'</button><br>';
-				html += '���������� �� ���������<br>';		
+				html += '&nbsp;<button title="Запустить улучшение до '+(item.level + 1)+' уровня" onclick="levelUp()">-> '+(item.level + 1)+'</button></div>';
+			}
+			html += '<div style="clear:both"></div></div>';
+
+			if(item.upgrading !== 1) {	
+				html += 'требования по улучшению<br>';		
 				if(item.l_time) html += 'time: '+item.l_time+'<br>';
 				if(item.l_pop) html += 'pop: '+item.l_pop+'<br>';
 				if(item.l_minerals) html += 'minerals: '+item.l_minerals+'<br>';
@@ -68,8 +102,8 @@ var PCView = Class.inherit({
 			html += '<br>';
 
 			if(item.type > 2) { // skip capital and warehouse
-				html += (item.turn_on === 1 ? '<span style="color:green">��������' : '<span style="color:red">���������')+'</span>&nbsp;';
-				html += (item.turn_on === 1 ? '<button onclick="turnOff()">����.</button>' : '<button onclick="turnOn()">���.</button>');
+				html += (item.turn_on === 1 ? '<span style="color:green">работает' : '<span style="color:red">выключено')+'</span>&nbsp;';
+				html += (item.turn_on === 1 ? '<button onclick="turnOff()">откл.</button>' : '<button onclick="turnOn()">вкл.</button>');
 				html += '<br>';		
 			}
 
@@ -81,6 +115,7 @@ var PCView = Class.inherit({
 			if(item.crystalsInHour) html += 'crystals: <span style="color:green">+'+item.crystalsInHour+'</span> per hour<br>';
 		
 			pcsubmenu.innerHTML = '<div class="building_info">'+html+'</div>';
+			hover.apply(pcsubmenu);
 		}
 		else {
 			pcsubmenu.innerHTML = '';

@@ -1,4 +1,13 @@
 
+var timersCounters = {};
+function timerInfo(name) {
+	if(!(name in timersCounters)) timersCounters[name] = 0;
+	timersCounters[name] ++;
+	var html = '';
+	for(var name in timersCounters) html += name+' = '+timersCounters[name]+'<br>';
+	timers.innerHTML = html;
+}
+
 Number.prototype.humanView = function () {
 	return this.toString().split( /(?=(?:\d{3})+(?:\.|$))/g ).join( " " );
 }

@@ -1,0 +1,6 @@
+{
+	"name":								"html_builder",
+	"sub_process_communication_port":	6102,
+	"logs_dir":							"/var/log/html_builder",
+	"daemon_user":						"html_builder"
+}

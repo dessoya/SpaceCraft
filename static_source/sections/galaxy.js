@@ -135,6 +135,7 @@ var SectionGalaxy = Class.inherit({
 	},
 
 	animate: function() {
+		timerInfo('galaxy animate');
 		this.requestId = requestAnimationFrame( this.binded_animate );
 		this.render();
 	},

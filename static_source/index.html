@@ -4,6 +4,7 @@
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 <title>space craft</title>
 <link rel="stylesheet" type="text/css" href="/c/main.css" /> 
+<link rel="stylesheet" type="text/css" href="/c/w4.css" /> 
 
 <script src="three.js"></script>
 <script src="stats.js"></script>
@@ -14,6 +15,7 @@
 <script type="text/javascript" src="cookie.js"></script>
 <script type="text/javascript" src="Class.js"></script>
 <script type="text/javascript" src="AJAX.js"></script>
+<script type="text/javascript" src="hover.js"></script>
 
 <!-- application -->
 <script type="text/javascript" src="config.js"></script>
@@ -52,6 +54,7 @@ var sections = Sections.create();
 
 function onLoad() {
 	favicon = new Favicon();
+	hover.init();
 	app = apps[document.domain];
 	sess = $.cookie('scsess');
 	initSession();
@@ -73,6 +76,7 @@ function onLoad() {
 </div>
 <div class="main">
 	<div class="detail">
+		<div style="font-size:8px" id="timers"></div>
 		<div id="detail"></div>
 		<div id="detail_submenu"></div>
 	</div>
