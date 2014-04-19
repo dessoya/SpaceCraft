@@ -1,0 +1,304 @@
+.logon_bkg {
+	background: #000 url(/i/logon2.jpeg ) center -30px no-repeat ;
+}
+
+body {
+	margin:		0;
+	padding:	0;
+	font-size:	100%;
+	background:	#000;
+	color:		#ccc;
+	font-family:	Trebuchet ms;
+}
+
+.cb { clear: both }
+
+.menu {
+	width:		960px;
+	margin:		0 auto;
+	min-height:	50px;
+}
+
+.menu .flag {
+	border:		1px solid black;
+	width:		18px;
+	height:		13px;
+	float:		left;
+}
+
+.menu .flag .i {
+	width:		16px;
+	height:		11px;
+	background-image: url(/i/flags.gif);
+	border:		1px solid black;
+	cursor:		pointer;
+}
+
+.menu .flag.current {
+	border-color:	#aaa !important;
+}
+
+.menu .flag.ru .i {
+	margin-right:	4px;
+	background-position: 0px 0px;
+}
+
+.menu .flag.en .i {
+	background-position: 0px -11px;
+}
+
+#lang {
+	float:		right;
+	padding:	8px 5px 0 0;
+}
+
+#usermenu {
+	float:		right;
+	width:		300px;
+	height:		20px;
+	margin-right:	5px;
+	padding-top:	3px;
+}
+
+#usermenu .caption {
+	border:		1px solid #aaa;
+	border-radius:	3px;
+	padding:	3px;
+	background:	#544;
+	opacity:	0.5;
+	font-size:	12px;
+	box-shadow:	2px 2px 8px #888888;
+}
+
+#usermenu a {
+	color:		#fff;
+	float:		right;
+}
+
+
+.main {
+	width:		960px;
+	margin:		0 auto;
+	height:		800px;
+}
+
+.main .detail {
+	width:		180px;
+	float:		left;
+	height:		800px;
+}
+
+.main .view {
+	width:		780px;
+	float:		left;
+	height:		800px;
+}
+
+#auth_list {
+	font-size: 11px;
+	line-height: 20px;
+}
+
+#auth_list a { float:right; display: inline; margin-left:5px }
+#auth_list a:hover { color: #aa5544 }
+
+
+input[type="text"] {
+	border: 1px solid #885544;
+	margin: 2px;
+	padding: 2px;
+}
+
+.usermenu .leftb,
+.usermenu .rightb {
+	font-size: 12px;
+	position: absolute;
+	top: 0;
+}
+
+.usermenu .leftb {
+	left: 0;
+}
+
+.usermenu .rightb {
+	left: 100px;
+}
+
+.usermenu .line {
+	position: relative;
+	height: 20px;
+}
+
+.usermenu a {
+	text-align: center;
+	position: absolute;
+	left: 10px;
+	top: 0;
+	width: 80px;
+	font-size: 12px;
+	color: #ffeeee;
+	text-decoration: none;
+}
+.usermenu a:hover {
+	/* text-decoration: underline; */
+	color: #ffaa88;
+}
+
+.usermenu .underline {
+  background-color: #ffaa88;
+}
+
+
+
+
+
+.galaxy_list a {
+	font-size: 12px;
+	color: #ffeeee;
+	text-decoration: none;
+}
+.galaxy_list a:hover {
+	text-decoration: underline;
+	color: #ffaa88;
+}
+
+
+#planet_info {
+	margin-top: 4px;
+	margin-left: 3px;
+	font-size: 11px;
+	color: #dddddd;
+}
+
+.resicon {
+	width:16px;
+	height:16px;
+	background-image: url("../i/icons.png");
+}
+
+#planet_info .resicon {
+	margin-right: 4px;
+	margin-left: 4px;
+	float:left;
+}
+
+#planet_info .label {
+	margin-right: 4px;
+	padding: 0 3px;
+}
+
+#planet_info .label,
+#planet_info .div {
+	height:16px;
+	float:left;
+	line-height: 16px;
+	cursor: default;
+}
+
+#planet_info .div {
+	margin: 0 4px 0 0;
+	padding: 0;
+}
+
+#planet_info .label:hover {
+	background: #664433;
+}
+
+#planet_info .label.green {
+	color:green;
+	font-weight: bold;
+}
+
+#planet_info .label.red {
+	color:red;
+}
+
+#planet_info .label.hide,
+#planet_info .div.hide {
+	display:none;
+}
+
+.resicon.population { background-position: -256px 0 }
+.resicon.energy{  background-position: -48px 0 }
+.resicon.metal {  background-position: -80px 0 }
+.resicon.crystal {  background-position: 0 0 }
+
+
+#detail_submenu {
+	margin-top: 20px;
+	cursor: default;
+}
+
+#detail_submenu .hint {
+	background: #665544;
+	color: #000;
+	padding: 0 4px;
+}
+
+
+.building_info {
+	font-size:11px;
+}
+
+.building_info .bld_type {
+	font-size:13px;
+	font-weight:bold;
+	color: #ffaaaa;
+}
+
+.building_info button {
+	font-size:8px;
+	margin:0;
+	padding:0 2px;	
+}
+
+
+#pcmenu .mitem { 
+	float:left;
+	width: 35px;
+	border: 1px solid #fff;
+	font-size: 9px;
+	padding: 1px 3px;
+	cursor: pointer;
+}
+#pcmenu .mitem.active { 
+	background: #886644;
+}
+
+#pcsubmenu .build {
+	width: 80px;
+	border: 1px solid #fff;
+	font-size: 9px;
+	padding: 1px 3px;
+	cursor: pointer;
+	margin: 3px 0;
+}
+
+#pcsubmenu .build:hover {
+	background: #886644;
+}
+
+#pcsubmenu .build.active {
+	background: #886644;
+	border: 1px solid red;
+}
+
+.underline {
+  display: block;
+  position: relative;
+  padding: 0;
+  width: 100%;
+  height: 2px;
+  bottom: 35%;
+  right: 0;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  transition: all 0.25s ease-in-out 0s;
+  
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+}
+
+a:hover .underline {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}

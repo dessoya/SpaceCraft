@@ -3,16 +3,13 @@
 
 var cerber			= require('cerber')
   , fs				= require('fs')
-  , url				= require('url')
   , util			= require('util')
-  , crypto			= require('crypto')
   , http			= require('http')
   , errors			= require('errors')
-  , Phoenix			= require('phoenix')
-  , cql				= require('ncc')
   , cc				= require('cconfig')
   , coroutine		= require('coroutine')
-  , ct				= require('ct')
+
+  , Builder			= require('./Builder.js')
 
 cerber.initService()
 
@@ -22,13 +19,16 @@ errors.activateCatcher()
 
 coroutine(function*(params, sv) {
 
-	global.config = JSON.parse(yield fs.readFile(cerber.daemonPath + '/html_builder.config.json', sv.resume))
+	var jsonContent = yield fs.readFile(cerber.daemonPath + '/html_builder.config.json', sv.resume)
+	global.config = JSON.parse(('' + jsonContent).replace(/\/\*.+\*\//g, ''))
 	var commonConfig = JSON.parse(yield fs.readFile(cerber.daemonPath + '/../config/config.json', sv.resume))
 
 	var branch = process.env.SC_BRANCH || 'trunk'
 	console.log('use config branch ' + branch)
 
 	global.config = yield cc.create(config, branch, commonConfig, sv.onlyok)
+
+	global.builder = Builder.create(config.static_source, config.static, config.pages)
 
 }, null, function(event, data) {
 	if(GE_ERROR === event) {

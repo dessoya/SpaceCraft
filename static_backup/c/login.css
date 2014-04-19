@@ -1,0 +1,194 @@
+.logon_bkg {
+	background: #000 url(/i/logon2.jpeg ) center -30px no-repeat ;
+}
+
+.logon {
+	padding-top:50px;
+	padding-left:99px;
+}
+
+.loginform {
+	width:250px;
+	border:1px solid #ddd;
+	border-radius:5px;
+	padding:5px;
+	background:#544;
+	box-shadow: 2px 2px 8px #888888;
+	position:relative;
+}
+.loginform label div {
+	float:left;
+	width:80px;
+	font-size:12px;
+	line-height:28px;
+}
+.loginform input {
+	float:right;
+	width:160px;
+	border:1px solid #bbb;
+	border-radius:2px;
+	background:#877;
+	color:#222;
+	padding:2px;
+	font-size:12px;
+	font-family: Trebuchet ms;
+}
+.loginform pre {
+	clear:both;
+}
+.loginform label {
+	display:block;
+	margin-bottom:2px;
+}
+
+.loginform button {
+	font-size:12px;
+	font-family: Trebuchet ms;
+	float:right;
+}
+
+
+.logon_block {
+	width:260px;
+	bottom:0px;
+	position: absolute;
+	top: 0px; left: 0px;
+	background: #444;
+	opacity:0.8;
+
+}
+
+.bubblingG {
+margin: 15px 0 0 100px;
+text-align: center;
+width:80px;
+height:50px;
+}
+
+.bubblingG span {
+display: inline-block;
+vertical-align: middle;
+width: 10px;
+height: 10px;
+margin: 25px auto;
+background: #000000;
+-moz-border-radius: 50px;
+-moz-animation: bubblingG 1.3s infinite alternate;
+-webkit-border-radius: 50px;
+-webkit-animation: bubblingG 1.3s infinite alternate;
+-ms-border-radius: 50px;
+-ms-animation: bubblingG 1.3s infinite alternate;
+-o-border-radius: 50px;
+-o-animation: bubblingG 1.3s infinite alternate;
+border-radius: 50px;
+animation: bubblingG 1.3s infinite alternate;
+}
+
+#bubblingG_1 {
+-moz-animation-delay: 0s;
+-webkit-animation-delay: 0s;
+-ms-animation-delay: 0s;
+-o-animation-delay: 0s;
+animation-delay: 0s;
+}
+
+#bubblingG_2 {
+-moz-animation-delay: 0.39s;
+-webkit-animation-delay: 0.39s;
+-ms-animation-delay: 0.39s;
+-o-animation-delay: 0.39s;
+animation-delay: 0.39s;
+}
+
+#bubblingG_3 {
+-moz-animation-delay: 0.78s;
+-webkit-animation-delay: 0.78s;
+-ms-animation-delay: 0.78s;
+-o-animation-delay: 0.78s;
+animation-delay: 0.78s;
+}
+
+@-moz-keyframes bubblingG {
+0% {
+width: 10px;
+height: 10px;
+background-color:#000000;
+-moz-transform: translateY(0);
+}
+
+100% {
+width: 24px;
+height: 24px;
+background-color:#FFFFFF;
+-moz-transform: translateY(-21px);
+}
+
+}
+
+@-webkit-keyframes bubblingG {
+0% {
+width: 10px;
+height: 10px;
+background-color:#000000;
+-webkit-transform: translateY(0);
+}
+
+100% {
+width: 24px;
+height: 24px;
+background-color:#FFFFFF;
+-webkit-transform: translateY(-21px);
+}
+
+}
+
+@-ms-keyframes bubblingG {
+0% {
+width: 10px;
+height: 10px;
+background-color:#000000;
+-ms-transform: translateY(0);
+}
+
+100% {
+width: 24px;
+height: 24px;
+background-color:#FFFFFF;
+-ms-transform: translateY(-21px);
+}
+
+}
+
+@-o-keyframes bubblingG {
+0% {
+width: 10px;
+height: 10px;
+background-color:#000000;
+-o-transform: translateY(0);
+}
+
+100% {
+width: 24px;
+height: 24px;
+background-color:#FFFFFF;
+-o-transform: translateY(-21px);
+}
+
+}
+
+@keyframes bubblingG {
+0% {
+width: 10px;
+height: 10px;
+background-color:#000000;
+transform: translateY(0);
+}
+
+100% {
+width: 24px;
+height: 24px;
+background-color:#FFFFFF;
+transform: translateY(-21px);
+}
+
+}

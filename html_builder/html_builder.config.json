@@ -4,5 +4,28 @@
 	},
 
 	"ek": {
+		"compilerPath": "/home/sc/html_builder/compiler.jar",
+		"compiledCache": "/tmp/minifiedCache",
+
+		"hints": 0,
+
+		"static_source": "/home/sc/static_source",
+		"static": "/home/sc/static",
+
+		"pages": [
+			{
+				"path": "index.html",
+				"dest": "index.html",
+				"files": [
+
+					/* ---- common stuff ------- */
+					  "common.css"
+
+					
+					/* ---- page javascript code ------- */
+					, "index.js"
+				]
+			}
+		]
 	}
 }

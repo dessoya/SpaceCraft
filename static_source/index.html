@@ -3,73 +3,11 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
 <title>space craft</title>
-<link rel="stylesheet" type="text/css" href="/c/main.css" /> 
-<link rel="stylesheet" type="text/css" href="/c/w4.css" /> 
-
+<style>%css%</style>
 <script src="three.js"></script>
-<script src="stats.js"></script>
-
-<!-- modules -->
-<script type="text/javascript" src="/j/favicon.js"></script>
-<script>$={}</script>
-<script type="text/javascript" src="cookie.js"></script>
-<script type="text/javascript" src="Class.js"></script>
-<script type="text/javascript" src="AJAX.js"></script>
-<script type="text/javascript" src="hover.js"></script>
-
-<!-- application -->
-<script type="text/javascript" src="config.js"></script>
-<script type="text/javascript" src="usermenu.js"></script>
-<script type="text/javascript" src="detailmenu.js"></script>
-<script type="text/javascript" src="userresource.js"></script>
-<script type="text/javascript" src="commonStuff.js"></script>
-
-<!-- sections classes -->
-<script type="text/javascript" src="sections/main.js"></script>
-<script type="text/javascript" src="sections/profile.js"></script>
-<script type="text/javascript" src="sections/galaxys.js"></script>
-<script type="text/javascript" src="sections/galaxy.js"></script>
-<script type="text/javascript" src="sections/capital.js"></script>
-
-<script type="text/javascript" src="sections/planet/pc_view.js"></script>
-<script type="text/javascript" src="sections/planet/pc_build.js"></script>
-<script type="text/javascript" src="sections/planet/planetinfo.js"></script>
-<script type="text/javascript" src="sections/planet.js"></script>
-
-<script type="text/javascript" src="sections.js"></script>
-
-<script>
-
-function logout() {
-	AJAX.create({
-		type: 'json',
-		url: selfDomain()+'/api/session/logout',
-		success: function(answer, ctx) {
-			document.location.href = authservice+'/api/logout?app='+app;
-		}
-	})
-}
-
-var sections = Sections.create();
-
-function onLoad() {
-	favicon = new Favicon();
-	hover.init();
-	app = apps[document.domain];
-	sess = $.cookie('scsess');
-	initSession();
-}
-
-</script>
 </head>
-<body class="logon_bkg" onload="onLoad()">
-
+<body class="logon_bkg">
 <div class="menu">
-	<div id="lang">
-		<!--div class="flag ru"><div class="i"></div></div>
-		<div class="flag en"><div class="i"></div></div-->
-		<div class="cb"></div>
-	</div>
 	<div id="header_userinfo"></div>
 	<div id="usermenu"><div id="auth_list"></div></div>
 	<div class="cb"></div>
@@ -83,5 +21,7 @@ function onLoad() {
 	<div id="view" class="view"></div>
 	<div class="cb"></div>
 </div>
+<script>%js%</script>
 </body>
 </html>
+<script>onLoad()</script>
