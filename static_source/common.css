@@ -19,35 +19,48 @@ body {
 	min-height:	50px;
 }
 
-
 #usermenu {
 	float:		right;
-	width:		300px;
+	width:		400px;
 	height:		20px;
-	margin-right:	5px;
-	padding-top:	3px;
+	text-align:	right;
 }
 
-#usermenu .caption {
-	border:		1px solid #aaa;
-	border-radius:	3px;
-	padding:	3px;
-	background:	#544;
-	opacity:	0.5;
-	font-size:	12px;
-	box-shadow:	2px 2px 8px #888888;
+.main {
+	width:		960px;
+	margin:		0 auto;
+	height:		800px;
 }
 
-#usermenu a {
-	color:		#fff;
-	float:		right;
+.main .detail {
+	width:		180px;
+	float:		left;
+	height:		800px;
+}
+
+.main .view {
+	width:		780px;
+	float:		left;
+	height:		800px;
 }
 
 
-#auth_list {
-	font-size: 11px;
-	line-height: 20px;
+
+.underline {
+  display: block;
+  position: relative;
+  padding: 0;
+  height: 2px;
+  bottom: 35%;
+  right: 0;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  transition: all 0.25s ease-in-out 0s;
+  
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
 }
 
-#auth_list a { float:right; display: inline; margin-left:5px }
-#auth_list a:hover { color: #aa5544 }
+a:hover .underline {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}

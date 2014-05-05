@@ -1,0 +1,6 @@
+{
+	"name":								"auth_service",
+	"sub_process_communication_port":	6033,
+	"logs_dir":							"/var/log/auth_service",
+	"daemon_user":						"dummy"
+}

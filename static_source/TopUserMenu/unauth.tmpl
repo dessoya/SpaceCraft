@@ -1,0 +1,7 @@
+<span>
+	<div>Войти через: </div>
+	% for method in methods %
+		<a style="width:%method.width%px" href="%authservice%/api/%method.name%?session_uuid=%session_uuid%">[&nbsp;&nbsp;%method.title%&nbsp;&nbsp;]<span style="width:%method.width%px" class="underline"></span></a>
+	% for end %
+	<pre></pre>
+</span>

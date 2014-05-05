@@ -1,0 +1,32 @@
+{
+	"common": {
+
+		"http_server": {
+			"port": 8400
+		},
+
+		"ws_server": {
+			"port": 8401
+		},
+
+		"cassandra": {
+			"getAConnectionTimeout":	1000,
+			"poolSize":					20
+		},
+
+		"auth_service": {
+			"host": "livegx.net",
+			"port": 11500
+		}
+	},
+
+	"ek": {
+		"rate": 10,
+
+		"sessionCookie": "scsess",
+		"cassandra": {
+			"hosts":					"@cassandra/inner/ip",
+			"keyspace":					"sc"
+		}
+	}
+}

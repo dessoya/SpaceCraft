@@ -1,0 +1,13 @@
+{
+	"http_server": {
+		"port": 11500
+	},
+	"service_site": "http://livegx.net",
+
+	"sessionCookie": "authsess",
+	"methods": [
+		  "google", { }
+		, "facebook", { "clientID": "638233889579358", "clientSecret": "f0753f5228ae1d92aca19dcfa8831a73" }
+		, "vk", { "clientID": "4296483", "clientSecret": "P4s09aZIFWUdO8xWEp9l" }
+	]
+}

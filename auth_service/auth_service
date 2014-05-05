@@ -1,0 +1,47 @@
+#!/bin/node --harmony
+'use strict'
+
+var cerber			= require('cerber')
+  , errors			= require('errors')
+  , fs				= require('fs')
+  , url				= require('url')
+  , http			= require('http')
+  , util			= require('util')
+  , express			= require('express')
+  , passport		= require('passport')
+
+cerber.initService()
+http.globalAgent.maxSockets = 200;
+
+errors.activateCatcher()
+
+global.config = JSON.parse(fs.readFileSync(cerber.daemonPath + '/config.json'))
+console.log(util.inspect(config,{depth:null}))
+
+passport.serializeUser(function(user, done) { done(null, user.id) })
+passport.deserializeUser(function(id, done) { done(err, {}) })
+
+var app = express()
+
+app.configure(function() {
+	app.use(express.logger())
+	app.use(express.cookieParser())
+
+	app.use(passport.initialize())
+ 	app.use(passport.session())
+
+	app.use(app.router)
+})
+
+require('./status.js').init(app)
+require('./tokens.js').init(app)
+require('./sessions.js').init(app)
+require('./common.js').init(app)
+
+// install auth methods
+for(var i = 0, m = config.methods, l = m.length; i < l; i += 2) {
+	var method = m[i], method_config = m[i + 1]
+	require('./methods/' + method + '.js').init(app, method_config)
+}
+
+app.listen(config.http_server.port)

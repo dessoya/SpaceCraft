@@ -7,7 +7,9 @@
 		"compilerPath": "/home/sc/html_builder/compiler.jar",
 		"compiledCache": "/tmp/minifiedCache",
 
-		"hints": 0,
+		"hints": 1,
+		"useMini": 0,
+		"cleanDebug": 0,
 
 		"static_source": "/home/sc/static_source",
 		"static": "/home/sc/static",
@@ -20,6 +22,19 @@
 
 					/* ---- common stuff ------- */
 					  "common.css"
+
+					, "config.js"
+					, "favicon.js"
+					, "Class.js"
+					, "AJAX.js"
+					, "ws.js"
+
+					, "TopUserMenu/*"
+
+					, "AppState.js"
+					, "appStates/init/*"
+					, "appStates/unauthed/*"
+					, "appStates/authed/*"
 
 					
 					/* ---- page javascript code ------- */

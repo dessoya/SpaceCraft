@@ -1,0 +1,11 @@
+<span>
+	<div>welcome</div>
+	<a href="#profile">%username% !<span class="underline"></span></a>
+	% for method in methods %		
+		% if !$exists_methods[$method.name] %
+		<a href="%authservice%/api/%method.name%?session_uuid=%session_uuid%">[&nbsp;+&nbsp;%method.title%&nbsp;&nbsp;]<span class="underline"></span></a>
+		% if end %
+	% for end %
+	<a href="#logout">[&nbsp;&nbsp;logout&nbsp;&nbsp;]<span class="underline"></span></a>
+	<pre></pre>
+</span>

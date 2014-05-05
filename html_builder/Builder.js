@@ -26,7 +26,8 @@ var Builder = Class.inherit({
 	onInterval: function() {
 		for(var path in this.files) {
 			var stat = fs.statSync(path), item = this.files[path], mtime = stat.mtime.getTime()
-			if(mtime > item.mtime) {
+			if(mtime > item.mtime && stat.size > 0) {
+				console.log('mtime '+mtime)
 				item.mtime = mtime
 				var c = item.callbacks
 				for(var i = 0, l = c.length; i < l; i++)

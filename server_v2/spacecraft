@@ -1,0 +1,87 @@
+#!/usr/bin/env node-harmony
+'use sctrict'
+
+var cerber			= require('cerber')
+  , fs				= require('fs')
+  , url				= require('url')
+  , util			= require('util')
+  , crypto			= require('crypto')
+  , http			= require('http')
+  , errors			= require('errors')
+  , Phoenix			= require('phoenix')
+  , cql				= require('ncc')
+  , cc				= require('cconfig')
+  , coroutine		= require('coroutine')
+  , ct				= require('ct')
+
+//  , ResourceTreator	= require('./ResourceTreator.js')
+  , WSServer		= require('./WSServer.js')
+
+cerber.initService()
+
+http.globalAgent.maxSockets = 200
+
+errors.activateCatcher()
+
+coroutine(function*(params, sv) {
+
+	global.config = JSON.parse(yield fs.readFile(cerber.daemonPath + '/spacecraft.config.json', sv.resume))
+	var commonConfig = JSON.parse(yield fs.readFile(cerber.daemonPath + '/../config/config.json', sv.resume))
+
+	var branch = process.env.SC_BRANCH || 'trunk'
+	console.log('use config branch ' + branch)
+
+	global.config = yield cc.create(config, branch, commonConfig, sv.onlyok)
+
+	global.ncc = new cql.Client(config.cassandra)
+	process.on('SIGINT', function() { ncc.shutdown()	})
+
+	var schemaConfig = {
+		keyspace: 'sc',
+		objects: {
+
+			planet: {
+				table: 'planets',
+				type_id: 1,
+			},
+
+			live_planet: {
+				table: 'live_planets',
+				type_id: 4,
+			},
+
+			user: {
+				table: 'users',
+				type_id: 2,
+			},
+
+			building: {
+				table: 'buildings',
+				type_id: 3,
+			},
+		}
+	}
+
+	global.schema = yield ct.loadSchema(ncc, schemaConfig, sv.resume)
+/*
+	delete schema.ncc
+	console.log(util.inspect(schema,{depth:null}))
+	process.exit(255)
+*/
+
+	global.wsserver = WSServer.create(config.ws_server)
+
+	var httpserver =  Phoenix.create({port:config.http_server.port
+	//	,hideRequestMessage: false
+	})
+
+	httpserver.mix(require('./middleware/cookie.js'))
+	httpserver.mix(require('./services/auth.js'))
+
+}, null, function(event, data) {
+	if(GE_ERROR === event) {
+		console.showError(data)
+		process.exit(255)
+	}
+})
+
