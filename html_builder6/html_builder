@@ -1,0 +1,3 @@
+#!/usr/bin/env node-harmony
+//require('smart-require')({ cachePath: '/tmp/smart-require', debug: 'Delta' })('./application.js')
+require('./application.js')
