@@ -1,0 +1,12 @@
+{
+	"trunk": {
+		"httpserver": {
+			"port": 6310
+		},
+
+		"auth_service": {
+			"host": "ilion-clan.org",
+			"port": 11500
+		}
+	}
+}

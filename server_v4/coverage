@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# place this lines in ~/.bashrc
+export SC_COVER_DIR=/home/cover
+export SC_DIR=/home/sc/server_v4
+
+istanbul cover --dir=$SC_COVER_DIR _mocha -- -R spec \
+$SC_DIR/test/models/*.js
