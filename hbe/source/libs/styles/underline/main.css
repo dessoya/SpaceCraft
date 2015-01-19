@@ -1,0 +1,18 @@
+.underline {
+  display: block;
+  position: relative;
+  padding: 0;
+  height: 2px;
+  bottom: 35%;
+  right: 0;
+  -webkit-transition: all 0.25s ease-in-out 0s;
+  transition: all 0.25s ease-in-out 0s;
+  
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+}
+
+a:hover .underline {
+  -webkit-transform: scaleX(1);
+  transform: scaleX(1);
+}

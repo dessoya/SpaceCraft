@@ -1,0 +1,39 @@
+body {
+	margin:		0;
+	padding:	0;
+	font-size:	100%;
+	background:	#000;
+	color:		#ccc;
+	font-family:	Trebuchet ms;
+}
+ 
+.menu {
+	width:		960px;
+	margin:		0 auto;
+	min-height:	50px;
+}
+
+#usermenu {
+	float:		right;
+	width:		400px;
+	height:		20px;
+	text-align:	right;
+}
+
+.main {
+	width:		960px;
+	margin:		0 auto;
+	height:		800px;
+}
+
+.main .detail {
+	width:		180px;
+	float:		left;
+	height:		800px;
+}
+
+.main .view {
+	width:		780px;
+	float:		left;
+	height:		800px;
+}

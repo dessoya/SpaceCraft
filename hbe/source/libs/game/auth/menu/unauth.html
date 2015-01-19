@@ -1,0 +1,7 @@
+<div>
+% for method in methods %
+	<a mark-click="onClickAuthMethod(element)" href="javascript:void(0)" _href="% authservice %/api/% method.name %?&session_uuid=% session_uuid %">[&nbsp;% method.name %&nbsp;]<span class="underline"></span></a>
+% end for %
+
+<span class="fr">% _l(component_path + '/join') %&nbsp;</span>
+</div>

@@ -1,0 +1,33 @@
+#usermenu div {
+	display: block;
+	position: relative;
+}
+
+.ctrl-authmenu a {
+	float: right
+}
+
+#usermenu {
+	font-family: 'trebuchet ms';
+	font-size: 11px;
+	padding-right: 4px;
+	padding-top: 4px;
+}
+
+#usermenu a {
+	text-decoration: none;
+	color: #aa8866;
+	display: block;
+	margin-left: 6px;
+	text-align: center;
+}
+
+#usermenu a:hover {
+	color: #ffaa88;
+}
+
+
+#usermenu .underline {
+  background-color: #ffaa88;
+  height: 1px;
+}

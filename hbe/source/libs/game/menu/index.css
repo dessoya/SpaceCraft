@@ -1,0 +1,26 @@
+.ctrl-mainmenu div.line {
+	display: block;
+	position: relative;
+	width: 120px;
+}
+
+
+.ctrl-mainmenu a {
+	text-decoration: none;
+	color: #aa8866;
+	display: block;
+	margin-left: 6px;
+	text-align: center;
+	font-family: 'trebuchet ms';
+	font-size: 13px;
+}
+
+.ctrl-mainmenu a:hover {
+	color: #ffaa88;
+}
+
+
+.ctrl-mainmenu .underline {
+  background-color: #ffaa88;
+  height: 1px;
+}

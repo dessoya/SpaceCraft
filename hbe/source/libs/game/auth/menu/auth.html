@@ -1,0 +1,9 @@
+<div>
+<a href="#logout">[ выход ]<span class="underline"></span></a>
+
+% for method in methods %
+	<a href="% authservice %/api/% method.name %?&session_uuid=% session_uuid %">[&nbsp;+&nbsp;% method.name %&nbsp;]<span class="underline"></span></a>
+% end for %
+
+<span class="fr">% username %&nbsp;</span>
+</div>

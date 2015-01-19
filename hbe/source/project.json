@@ -1,0 +1,30 @@
+{
+	"name": "spacecraft",
+
+	"builds": {
+		"debug": {
+			"path": "/home/sc/hbe/static/debug",
+
+			"cssPlacement": "external",
+
+			"jsPlacement": "external",
+
+			"wsserver": "ws://spacecraft-online.org:6310/",
+			"session_uuid_cookie": "session_uuid"
+		},
+
+		"production": {
+			"path": "/home/sc/hbe/static/production",
+
+			"cssPlacement": "internal",
+			"cssCompress": true,
+
+			"jsPlacement": "internal",
+			"jsCompress": true,
+			"stripSpaces": true,
+
+			"wsserver": "ws://spacecraft-online.org:6310/",
+			"session_uuid_cookie": "session_uuid"
+		}
+	}
+}
