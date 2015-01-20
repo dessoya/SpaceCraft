@@ -1,4 +1,4 @@
-(function ($) {
+(function () {
 
 	var pluses = /\+/g;
 
@@ -20,7 +20,7 @@
 		} catch(er) {}
 	}
 
-	var config = $.cookie = function (key, value, options) {
+	var config = function (key, value, options) {
 
 		// write
 		if (value !== undefined) {
@@ -68,4 +68,4 @@
 
 	config.defaults = {};
 
-})($);
+})();

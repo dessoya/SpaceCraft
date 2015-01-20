@@ -1,51 +1,6 @@
 
 currentLang = 'ru';
 
-applyLabels({
-
-	'sections/main': {
-		ru: 'Добро пожаловать в игру Space Craft'
-	}
-
-});
-
-Sections.Main = Class.inherit({
-
-	pattern: 'main',
-
-	onCreate: function() {
-	},
-
-	start: function() {
-	},
-
-	activate: function() {
-	    view_cont.innerHTML = _l('sections/main');
-	},
-
-	deactivate: function() {
-	}
-});
-
-Sections.Logout = Class.inherit({
-
-	pattern: 'logout',
-
-	onCreate: function() {
-	},
-
-	start: function() {
-	},
-
-	activate: function() {
-		ws.send({ command: 'logout' })
-		this.sections.setSection('main')
-	},
-
-	deactivate: function() {
-	}
-});
-
 
 function onLoad() {
 
@@ -69,7 +24,7 @@ function onLoad() {
 
 	var connectCount = 0
 	ws.on('#anyCommands', function(message) {
-		if(message.command !== 'pong') {
+		if(!message.command || message.command !== 'pong') {
 			console.log(message)
 	    }
 	})

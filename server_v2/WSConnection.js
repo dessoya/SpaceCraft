@@ -3,12 +3,23 @@
 var Class			= require('class')
   , util			= require('util')
   , coroutine		= require('coroutine')
+  , fs				= require('fs')
+  , cerber			= require('cerber')
 
   , Session			= require('./Session.js')
   , User			= require('./User.js')
 
 var re_spliter = /\s*\;\s*/, re_args_spliter = /\s*=\s*/
 var connectionIterator = 1
+
+var commands = { }
+var path = cerber.daemonPath + '/WSCommands', files = fs.readdirSync(path), c = files.length; while(c--) {
+	var file = path + '/' + files[c]
+	if(file.substr(-3) === '.js') {
+		var command = files[c].substr(0, files[c].length - 3)
+		commands[command] = require(file)
+	}
+}
 
 var WSConnection = Class.inherit({
 
@@ -109,8 +120,15 @@ var WSConnection = Class.inherit({
 			}
 			else {
 				console.log(util.inspect(packet,{depth:null}));
-				var method = 'command_' + packet.command
-				if(method in this) this[method](packet)
+				// var method = 'command_' + packet.command
+				if(packet.command in commands) {
+					commands[packet.command].create(packet, this)
+				}
+/*
+				if(method in this) {
+					this[method](packet)
+				}
+*/
 				else {
 					console.err('command '+packet.command+' not found')
 				}

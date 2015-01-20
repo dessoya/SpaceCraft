@@ -8,11 +8,15 @@ UI.Button = Control.inherit({
 	},
 
 	render: function() {
-		return '<button mark-click="onClick()">' + this.caption + '</button>';
+		return '<button id="btn-' + this.id + '" mark-click="onClick()">' + this.caption + '</button>';
 	},
 
 	onClick: function() {
 		this.emit('click');
+	},
+
+	disable: function() {
+		document.getElementById('btn-' + this.id).setAttribute('disabled', 'disabled')		
 	}
 })
 

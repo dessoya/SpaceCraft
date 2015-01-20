@@ -3,7 +3,7 @@ apps = {
 	'192.168.88.253': 'sc_home'
 }
 
-authservice = 'http://livegx.net:11500';
+authservice = 'http://ilion-clan.org:11500';
 
 function selfDomain() {
 	return 'http://' + document.domain + (location.port ? ':' + location.port : '');

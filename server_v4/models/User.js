@@ -41,6 +41,8 @@ var User = module.exports = Class.inherit({
 		var result = yield cc.query('select * from users where user_uuid = ' + uuid, g.resume)
 		if(result.rows.length < 1) {
 			user.valid = false
+			var row = result.rows[0]
+			user.player_uuid = row.player_uuid
 			return user
 		}
 
@@ -71,7 +73,7 @@ var User = module.exports = Class.inherit({
 
 		do {
 			user.uuid = uuid.v4()
-			var result = yield cc.query('insert into users (user_uuid, username, tag) values ('+user.uuid+','+cc.escape(name) + ',' + tag + ') if not exists', g.resume)
+			var result = yield cc.query('insert into users (user_uuid, username, tag, create_time) values ('+user.uuid+','+cc.escape(name) + ',' + tag + ',now()) if not exists', g.resume)
 		} while (!result.rows[0]['[applied]'])
 
 		return user
@@ -103,4 +105,21 @@ var User = module.exports = Class.inherit({
 		var r = yield 0
 		console.log(util.inspect(r,{depth:null}))
 	})
+})
+
+User.install = coroutine(function*(cc, g) {
+
+	var querys = ('' + (yield fs.readFile(__dirname + '/User.cql', g.resume))).split(';')
+	for(var i = 0, l = querys.length; i < l; i++) {
+		var query = querys[i]
+		query = query.replace(/^[\r\s\t\n]+|[\r\n\s\t]+$/g, '')
+		query = query.replace(/[\t\r\n]+/g, '')
+		if(query[0] == 'd') {
+			yield cc.query(query, g.resumeWithError)
+		}
+		else {
+			yield cc.query(query, g.resume)
+		}
+	}
+
 })

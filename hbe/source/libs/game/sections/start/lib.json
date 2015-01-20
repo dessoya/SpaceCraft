@@ -1,3 +1,3 @@
 {
-	"use0": "hash_sections,class,langs,ui/button"
+	"use0": "hash_sections,class,langs,ui/button,coroutine"
 }

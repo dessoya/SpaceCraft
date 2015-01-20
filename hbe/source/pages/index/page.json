@@ -2,7 +2,8 @@
 	"use0": "cookie,hash_sections,net/ajax,class,styles/common",
 	"use1": "net/ws,langs",
 	"use2": "game/styles,game/auth/menu,game/menu",
-	"use21":"game/sections/about",
+	"use21":"game/sections/about,game/sections/logout,game/sections/main",
+	"use22":"game/sections/start",
 	"use22":"game/sections/start",
 	"use3": "styles/underline",
 

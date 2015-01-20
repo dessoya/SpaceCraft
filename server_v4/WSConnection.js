@@ -17,6 +17,8 @@ var items = [{
 	},
 
 	send: function(message, callback) {
+	    console.log('send command')
+	    console.log(message)
 		this.connection.send(JSON.stringify(message), callback)
 	},
 

@@ -6,14 +6,17 @@ var Class			= require('class')
 
 var Builder = Class.inherit({
 
-	onCreate: function(sourcePath, staticPath, pagesConfig) {
+	onCreate: function(sourcePath, pagesConfig, builds) {
 		this.sourcePath = sourcePath
-		this.staticPath = staticPath
 
 		this.files = {}
 
 		this.pages = []
-		var c = pagesConfig.length; while(c--) this.pages.push(Page.create(this, pagesConfig[c]))
+		var bl = builds.length; while(bl--) {
+			var c = pagesConfig.length; while(c--) {
+				this.pages.push(Page.create(this, pagesConfig[c], builds[bl]))
+			}
+		}
 
 		this.interval = setInterval(this.onInterval.bind(this), 700)
 	},

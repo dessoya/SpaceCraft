@@ -35,6 +35,9 @@ WSConnection = Class.inherit({
 
 	onConnect_: function() {
 
+	    this.commandIdIterator = 1;
+	    this.commandFeedBacks = {};
+
 		this.connected = true;
 		for(var i = 0, l = this.queue.length; i < l; i++) {
 			this.ws.send(this.queue[i]);
@@ -44,6 +47,7 @@ WSConnection = Class.inherit({
 	},
 
 	onPacket: function (packet) {
+	    // console.log(packet);
 		var message;
         try {
 			message = JSON.parse(packet.data);
@@ -54,9 +58,16 @@ WSConnection = Class.inherit({
 				message = null;
 			}
 		}
-		if('object' === typeof message && 'command' in message) {
+		if('object' === typeof message && 'command' in message || 'commandId' in message) {
 			this.emit('#anyCommands', message);
-			this.emit(message.command, message);
+			if(message.commandId) {
+				var callback = this.commandFeedBacks[message.commandId];
+				delete this.commandFeedBacks[message.commandId];
+				callback(null, message);
+			}
+			else {
+				this.emit(message.command, message);
+			}
 		}
 		else {
 			this.emit('#badPacket', message);
@@ -64,6 +75,9 @@ WSConnection = Class.inherit({
 	},
 	
 	send: function(message) {
+	    if(message.command !== 'ping') {
+		    console.log(message);
+		}
 		message = JSON.stringify(message);
 		if(this.connected) {
 			this.ws.send(message);
@@ -75,6 +89,13 @@ WSConnection = Class.inherit({
 
 	onConnect: function() { this.emit('#connect'); },
 	onClose: function() { this.emit('#close'); },
-	onError: function (error) { this.emit('#error', error);	}
+	onError: function (error) { this.emit('#error', error);	},
+
+	sendWithFeedBack: function(command, callback) {
+		var commandId = this.commandIdIterator ++;
+		this.commandFeedBacks[commandId] = callback;
+		command.commandId = commandId;
+		this.send(command);
+	}
 
 });

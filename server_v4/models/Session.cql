@@ -1,3 +1,4 @@
+
 drop table auth_sessions;
 create table auth_sessions (
 

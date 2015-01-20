@@ -32,13 +32,13 @@ TopUserMenu = Class.inherit({
 			exists_methods: { google: params.user.google_uuid, facebook: params.user.facebook_uuid, vk: params.user.vk_uuid },
 			methods:[{
 				title: 'google',
-				name: 'google',
+				name: 'google'
 			},{
 				title: 'facebook',
-				name: 'facebook',
+				name: 'facebook'
 			},{
 				title: 'vk',
-				name: 'vk',
+				name: 'vk'
 			}]
 		})
 

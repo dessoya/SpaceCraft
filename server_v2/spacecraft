@@ -3,9 +3,7 @@
 
 var cerber			= require('cerber')
   , fs				= require('fs')
-  , url				= require('url')
   , util			= require('util')
-  , crypto			= require('crypto')
   , http			= require('http')
   , errors			= require('errors')
   , Phoenix			= require('phoenix')
@@ -14,8 +12,6 @@ var cerber			= require('cerber')
   , coroutine		= require('coroutine')
   , ct				= require('ct')
 
-//  , ResourceTreator	= require('./ResourceTreator.js')
-  , WSServer		= require('./WSServer.js')
 
 cerber.initService()
 
@@ -63,13 +59,8 @@ coroutine(function*(params, sv) {
 	}
 
 	global.schema = yield ct.loadSchema(ncc, schemaConfig, sv.resume)
-/*
-	delete schema.ncc
-	console.log(util.inspect(schema,{depth:null}))
-	process.exit(255)
-*/
 
-	global.wsserver = WSServer.create(config.ws_server)
+	global.wsserver = require('WebSocketServer').Server.create(config.ws_server)
 
 	var httpserver =  Phoenix.create({port:config.http_server.port
 	//	,hideRequestMessage: false

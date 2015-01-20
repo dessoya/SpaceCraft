@@ -21,6 +21,6 @@ applyLabels({
 
 	'%component_path%/index': {
 		ru: 'Космическая стратегия в реальном времени'
-	},
+	}
 
 });

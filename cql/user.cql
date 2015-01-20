@@ -11,14 +11,33 @@ create table users (
 	google_uuid uuid,
 	facebook_uuid uuid,
 
-	capital_planet_uuid uuid,
-	star_system_list list<uuid>,
-	planet_list list<uuid>,
-
 	primary key (user_uuid)
 );
 
-create index idx_vk on users (vk_uuid);
-create index idx_google on users (google_uuid);
-create index idx_facebook on users (facebook_uuid);
+drop table idx_users_vk_uuid;
+create table idx_users_vk_uuid (
 
+	vk_uuid uuid,
+	user_uuid uuid,
+
+	primary key (vk_uuid)
+);
+
+
+drop table idx_users_facebook_uuid;
+create table idx_users_facebook_uuid (
+
+	facebook_uuid uuid,
+	user_uuid uuid,
+
+	primary key (facebook_uuid)
+);
+
+drop table idx_users_google_uuid;
+create table idx_users_google_uuid (
+
+	google_uuid uuid,
+	user_uuid uuid,
+
+	primary key (google_uuid)
+);

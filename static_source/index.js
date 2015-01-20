@@ -1,5 +1,7 @@
 function onLoad() {
 
+	document.title = "\u2606 " + document.title;
+
 	favicon = new Favicon();
 	app = apps[document.domain];
 
@@ -28,4 +30,5 @@ function onLoad() {
 	appState = AppState.create();
 
 	ws.connect();
+	sections.start();
 }

@@ -4,15 +4,29 @@
 	},
 
 	"ek": {
-		"compilerPath": "/home/sc/html_builder/compiler.jar",
-		"compiledCache": "/tmp/minifiedCache",
 
-		"hints": 1,
-		"useMini": 0,
-		"cleanDebug": 0,
+		"compilerPath":		"/home/sc/html_builder/compiler.jar",
+		"compiledCache":	"/tmp/minifiedCache",
+		"static_source":	"/home/sc/static_source",
 
-		"static_source": "/home/sc/static_source",
-		"static": "/home/sc/static",
+		"builds": [
+			{
+				"name":				"debug",
+				"hints":			1,
+				"useMini":			0,
+				"cleanDebug":		0,
+
+				"staticPath":		"/home/sc/static"
+			},
+			{
+				"name":				"production",
+				"hints":			0,
+				"useMini":			1,
+				"cleanDebug":		1,
+
+				"staticPath":		"/home/sc/static_prod"
+			}
+		],
 
 		"pages": [
 			{
@@ -26,6 +40,7 @@
 					, "config.js"
 					, "favicon.js"
 					, "Class.js"
+					, "sections.js"
 					, "AJAX.js"
 					, "ws.js"
 
@@ -35,7 +50,7 @@
 					, "appStates/init/*"
 					, "appStates/unauthed/*"
 					, "appStates/authed/*"
-
+					, "Sections/*"
 					
 					/* ---- page javascript code ------- */
 					, "index.js"

@@ -52,6 +52,10 @@ var gen_init = coroutine(function*(g) {
 
 	global.cc = tcc.create({ poolSize: 5, hosts: [ '192.168.88.101' ], keyspace: 'sc_2' })
 
+	var dbentity = require('./DBEntity.js').create(cc)
+	yield dbentity.checkMainStructures(g.resume)
+	yield dbentity.loadModels(__dirname + '/models', g.resume)
+
 	var from = null, limit = 30
 	while(true) {
 
@@ -82,27 +86,13 @@ var gen_init = coroutine(function*(g) {
 	}
 
 
-	// load models
-	global.models = { }
-
-	var files = yield fs.readdir('./models', g.resume)
-	for(var i = 0, l = files.length; i < l; i++) {
-	    var file = files[i]
-	    if(file[0] == '.') continue
-		var stat = yield fs.stat('./models/' + file, g.resume)
-		if(stat.isFile() && '.js' === file.substr(-3)) {
-			var modelName = file.substr(0, file.length - 3)
-			models[modelName] = require('./models/' + file)
-		}
-	}
-
 	// console.log(util.inspect(models,{depth:null}))
 	global.httpserver = HTTPServer.create(config.httpserver)	
 })
 
 gen_init(function(err, result) {
 	if(err) {
-		errors.showError(err)
+		console.showError(err)
 		process.exit()
 	}
 })

@@ -28,7 +28,7 @@ coroutine(function*(params, sv) {
 
 	global.config = yield cc.create(config, branch, commonConfig, sv.onlyok)
 
-	global.builder = Builder.create(config.static_source, config.static, config.pages)
+	global.builder = Builder.create(config.static_source, config.pages, config.builds)
 
 }, null, function(event, data) {
 	if(GE_ERROR === event) {

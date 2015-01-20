@@ -29,7 +29,7 @@ User.update = function(user_uuid, fields, callback) {
 		params.push(fields[key])
 	}
 	var query = 'update users set ' + keys.join(',') + ' where user_uuid = ' + user_uuid
-	console.log(util.inspect([query,keys,params],{depth:null}))
+	// console.log(util.inspect([query,keys,params],{depth:null}))
 	ncc.execute(query, params, 1, callback)
 }
 
